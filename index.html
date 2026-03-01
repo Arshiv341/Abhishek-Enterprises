@@ -11,23 +11,47 @@ body{
     background:#F4F4F4;
 }
 
+/* A4 PAGE */
+@page {
+    size: A4;
+    margin: 10mm;
+}
+
 /* PRINT SETTINGS */
 @media print {
-    body * { visibility:hidden; }
-    #printArea, #printArea * { visibility:visible; }
+
+    body{
+        background:white;
+    }
+
+    body *{
+        visibility:hidden;
+    }
+
+    #printArea, #printArea *{
+        visibility:visible;
+    }
 
     #printArea{
         position:absolute;
         left:0;
         top:0;
-        width:100%;
-        min-height:100vh;
+        width:190mm;
+        min-height:277mm;
+        display:flex;
+        flex-direction:column;
     }
 
+    /* Footer bottom inside A4 */
     .footer{
-        position:absolute;
-        bottom:0;
+        margin-top:auto;
         width:100%;
+    }
+
+    /* Hide Action column */
+    th:last-child,
+    td:last-child{
+        display:none;
     }
 
     *{
@@ -37,8 +61,8 @@ body{
 }
 
 .container{
-    width:1100px;
-    margin:20px auto;
+    width:210mm;
+    margin:auto;
 }
 
 /* MODAL */
@@ -73,19 +97,19 @@ body{
     background:white;
     padding:20px;
     position:relative;
-    min-height:100vh;
+    min-height:277mm;
     display:flex;
     flex-direction:column;
 }
 
-/* WATERMARK IMAGE */
+/* WATERMARK */
 .watermark{
     position:absolute;
     top:50%;
     left:50%;
     transform:translate(-50%,-50%);
-    opacity:0.06;
-    width:400px;
+    opacity:0.05;
+    width:280px;
     z-index:0;
 }
 
@@ -119,9 +143,8 @@ body{
 }
 
 .logo{
-    width:90px;
+    width:110px;
     height:auto;
-    object-fit:contain;
 }
 
 /* COMPANY */
@@ -130,7 +153,7 @@ body{
 }
 
 .company-name{
-    font-size:36px;
+    font-size:28px;
     color:#2F4E64;
     font-weight:bold;
 }
@@ -146,11 +169,12 @@ table{
     margin-top:20px;
     position:relative;
     z-index:2;
+    font-size:14px;
 }
 
 th,td{
     border:1px solid #ccc;
-    padding:8px;
+    padding:6px;
     text-align:center;
 }
 
@@ -171,7 +195,7 @@ th{
 
 /* FOOTER */
 .footer{
-    margin-top:auto;   /* 🔥 pushes footer to bottom */
+    margin-top:auto;
     display:flex;
     position:relative;
     z-index:2;
@@ -194,7 +218,7 @@ th{
 /* BUTTONS */
 .controls{
     text-align:center;
-    margin-bottom:15px;
+    margin:4px 0;
 }
 
 button{
@@ -209,7 +233,6 @@ button{
 .remove{
     background:red;
 }
-
 </style>
 </head>
 
