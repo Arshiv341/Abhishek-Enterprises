@@ -57,17 +57,18 @@ button:hover{
     justify-content:space-between;
 }
 
-.header-left{
-    width:45%;
-}
-
-.logo{
-    width:290px;
-}
+.header-left{ width:45%; }
+.logo{ width:290px; }
 
 .left-details{
     font-size:12px;
     margin-top:5px;
+}
+
+.left-details p,
+.header-right p{
+    margin:0;
+    line-height:1.2;
 }
 
 .header-right{
@@ -95,8 +96,8 @@ button:hover{
     text-align:center;
     font-weight:bold;
     border:1px solid #000;
-    background-color:#275baa;
-    color:white;
+    background-color:#275baa !important;
+    color:white !important;
     padding:5px;
     margin-top:10px;
 }
@@ -138,10 +139,22 @@ th, td{
     justify-content:space-between;
 }
 
-/* PRINT */
+/* FORCE COLOR PRINT */
 @media print{
-    body{ background:white; }
-    .form-section{ display:none; }
+    body{
+        background:white;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    *{
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .form-section{
+        display:none;
+    }
 }
 </style>
 </head>
@@ -169,7 +182,7 @@ th, td{
 <input type="text" id="desc" placeholder="Description">
 <input type="number" id="qty" placeholder="Qty">
 <input type="number" id="price" placeholder="Price">
-<input type="number" id="discount" placeholder="Discount">
+<input type="number" id="discount" placeholder="Discount (₹)">
 
 <button onclick="addItem()">Add Item</button>
 <button onclick="window.print()">Print</button>
@@ -183,26 +196,24 @@ th, td{
 <div class="header-left">
 <img src="./WhatsApp Image 2026-03-01 at 11.10.04 AM.jpeg" class="logo">
 <div class="left-details">
-<p>Phone: 9260929367, 9198638082</p>
-<p>Email: abhisheknenterprises.books@gmail.com</p>
-<p>GST IN: 09BWQPR0128H2Z6</p>
+<p><b>ISO: </b>9001:2015</p>
+<p><b>MSME: </b>UDYAM-UP-43-0162513</p>
+<p><b>Phone: </b>9260929367,9198638082</p>
+<p><b>Email: </b> abhisheknenterprises.books@gmail.com</p>
+<p><b>GST IN:</b> 09BWQPR0128H2Z6</p>
 </div>
 </div>
 
 <div class="header-right">
 <p><b>Regd. Office:</b></p>
+<hr>
 <p>3/74 D, MIG SWARN JAYANTI VIHAR</p>
 <p>KOYLA NAGAR</p>
 <p>KANPUR 208011</p>
 </div>
 </div>
-
-<div class="bill-title">BILL OF SUPPLY</div>
-
-<p><b>Invoice No:</b> <span id="invoiceNo"></span></p>
-<p><b>Date:</b> <span id="date"></span></p>
-
-<!-- BILL & SHIP FLEX -->
+<hr>
+<!-- BILL & SHIP -->
 <div class="party-section">
 <div class="party-box">
 <b>Bill To:</b><br>
@@ -218,7 +229,10 @@ Phone: <span id="billPhoneDisplay"></span>
 Phone: <span id="shipPhoneDisplay"></span>
 </div>
 </div>
+<div class="bill-title">BILL OF SUPPLY</div>
 
+<p style="margin:3px 0;"><b>Invoice No:</b> <span id="invoiceNo"></span></p>
+<p style="margin:3px 0;"><b>Date:</b> <span id="date"></span></p>
 <div class="table-container">
 <table>
 <thead>
@@ -229,7 +243,7 @@ Phone: <span id="shipPhoneDisplay"></span>
 <th>Qty</th>
 <th>Price</th>
 <th>Gross</th>
-<th>Discount</th>
+<th>Discount (₹)</th>
 <th>Amount</th>
 </tr>
 </thead>
@@ -291,49 +305,35 @@ document.getElementById("date").innerText = new Date().toLocaleDateString();
 
 /* VARIABLES */
 let count = 0;
-let totalAmount = 0;
+let totalAmountValue = 0;
 let freightCharge = -2055;
 
 /* ADD ITEM */
 function addItem(){
 
-// Bill To
-document.getElementById("billToDisplay").innerText =
-document.getElementById("billName").value;
+billToDisplay.innerText = billName.value;
+billAddressDisplay.innerText = billAddress.value;
+billPhoneDisplay.innerText = billPhone.value;
 
-document.getElementById("billAddressDisplay").innerText =
-document.getElementById("billAddress").value;
+shipToDisplay.innerText = shipName.value;
+shipAddressDisplay.innerText = shipAddress.value;
+shipPhoneDisplay.innerText = shipPhone.value;
 
-document.getElementById("billPhoneDisplay").innerText =
-document.getElementById("billPhone").value;
-
-// Ship To
-document.getElementById("shipToDisplay").innerText =
-document.getElementById("shipName").value;
-
-document.getElementById("shipAddressDisplay").innerText =
-document.getElementById("shipAddress").value;
-
-document.getElementById("shipPhoneDisplay").innerText =
-document.getElementById("shipPhone").value;
-
-let isbn = document.getElementById("isbn").value;
-let desc = document.getElementById("desc").value;
-let qty = parseFloat(document.getElementById("qty").value);
-let price = parseFloat(document.getElementById("price").value);
-let discount = parseFloat(document.getElementById("discount").value);
+let qty = parseFloat(qty.value) || 0;
+let price = parseFloat(price.value) || 0;
+let discount = parseFloat(document.getElementById("discount").value) || 0;
 
 let gross = qty * price;
 let amount = gross - discount;
 
 count++;
-totalAmount += amount;
+totalAmountValue += amount;
 
 let row = `
 <tr>
 <td>${count}</td>
-<td>${isbn}</td>
-<td>${desc}</td>
+<td>${isbn.value}</td>
+<td>${desc.value}</td>
 <td>${qty}</td>
 <td>${price}</td>
 <td>${gross}</td>
@@ -343,9 +343,9 @@ let row = `
 `;
 
 document.getElementById("invoice-body").innerHTML += row;
-document.getElementById("totalAmount").innerText = totalAmount;
+document.getElementById("totalAmount").innerText = totalAmountValue;
 
-let net = totalAmount + freightCharge;
+let net = totalAmountValue + freightCharge;
 document.getElementById("netAmount").innerText = net;
 document.getElementById("amountWords").innerText = numberToWords(net) + " Only";
 }
