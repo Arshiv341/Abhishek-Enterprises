@@ -163,6 +163,10 @@ th, td{
 <div class="form-section">
 <h3>Create Invoice</h3>
 
+<!-- NEW GR INPUT -->
+<h4>Transport Details</h4>
+<input type="text" id="grno" placeholder="Enter G.R / R.R No">
+
 <h4>Bill To Details</h4>
 <input type="text" id="billName" placeholder="Bill To Name">
 <input type="text" id="billAddress" placeholder="Bill To Address">
@@ -189,35 +193,34 @@ th, td{
 <!-- INVOICE -->
 <div class="invoice">
 
-<!-- HEADER -->
 <div class="invoice-header">
 <div class="header-left">
 <img src="./WhatsApp Image 2026-03-01 at 11.10.04 AM.jpeg" class="logo">
 <div class="left-details">
-<p><b>ISO:</b> 9001:2015</p>
+<p><b>ISO : </b>   9001:2015</p>
+<p><b>GST IN:</b> 09BWQPR0128H2Z6</p>
 <p><b>MSME:</b> UDYAM-UP-43-0162513</p>
 <p><b>Phone:</b> 9260929367,9198638082</p>
 <p><b>Email:</b> abhisheknenterprises.books@gmail.com</p>
-<p><b>GST IN:</b> 09BWQPR0128H2Z6</p>
 </div>
 </div>
 
 <div class="header-right">
 <p><b>Regd. Office:</b></p>
 <hr>
-<p>3/74 D, 
+<p>3/74 D,</p>
 <p>MIG SWARN JAYANTI VIHAR</p>
 <p>KOYLA NAGAR</p>
 <p>KANPUR 208011</p>
 <hr>
 <p><b>Invoice No:</b> <span id="invoiceNo"></span></p>
+<p><b>G.R / R.R No:</b> <span id="grnoDisplay"></span></p>
 <p><b>Date:</b> <span id="date"></span></p>
 </div>
 </div>
 
 <hr>
 
-<!-- BILL / SHIP -->
 <div class="party-section">
 <div class="party-box">
 <b>Bill To:</b><br>
@@ -254,7 +257,6 @@ Phone: <span id="shipPhoneDisplay"></span>
 </table>
 </div>
 
-<!-- FOOTER -->
 <div class="footer">
 
 <div class="summary">
@@ -265,7 +267,7 @@ Phone: <span id="shipPhoneDisplay"></span>
 </tr>
 <tr>
 <td>Postage/Freight(+)</td>
-<td>-2055</td>
+<td>0</td>
 </tr>
 <tr>
 <td><b>Net Amount</b></td>
@@ -298,7 +300,6 @@ Phone: <span id="shipPhoneDisplay"></span>
 
 <script>
 
-/* AUTO INVOICE */
 let lastInvoice = localStorage.getItem("invoiceNumber");
 if(!lastInvoice){ lastInvoice = 970; }
 lastInvoice = parseInt(lastInvoice) + 1;
@@ -313,7 +314,6 @@ let freightCharge = -2055;
 
 function addItem(){
 
-// Party
 document.getElementById("billToDisplay").innerText = billName.value;
 document.getElementById("billAddressDisplay").innerText = billAddress.value;
 document.getElementById("billPhoneDisplay").innerText = billPhone.value;
@@ -322,7 +322,8 @@ document.getElementById("shipToDisplay").innerText = shipName.value;
 document.getElementById("shipAddressDisplay").innerText = shipAddress.value;
 document.getElementById("shipPhoneDisplay").innerText = shipPhone.value;
 
-// Item
+document.getElementById("grnoDisplay").innerText = document.getElementById("grno").value;
+
 let isbnVal = document.getElementById("isbn").value;
 let descVal = document.getElementById("desc").value;
 let qtyVal = parseFloat(document.getElementById("qty").value) || 0;
@@ -353,23 +354,64 @@ document.getElementById("invoice-body").innerHTML += row;
 
 document.getElementById("totalAmount").innerText = totalAmountValue.toFixed(2);
 
-let net = totalAmountValue + freightCharge;
+let net = totalAmountValue;
 document.getElementById("netAmount").innerText = net.toFixed(2);
 
 document.getElementById("amountWords").innerText = numberToWords(Math.floor(net)) + " Only";
 }
 
 function numberToWords(num){
-let a=["","One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten",
-"Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen",
-"Eighteen","Nineteen"];
-let b=["","","Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety"];
-if(num<20) return a[num];
-if(num<100) return b[Math.floor(num/10)]+" "+a[num%10];
-if(num<1000) return a[Math.floor(num/100)]+" Hundred "+numberToWords(num%100);
-if(num<100000) return numberToWords(Math.floor(num/1000))+" Thousand "+numberToWords(num%1000);
-if(num<10000000) return numberToWords(Math.floor(num/100000))+" Lakh "+numberToWords(num%100000);
-return num;
+
+if(num === 0) return "Zero";
+
+let ones = ["","One","Two","Three","Four","Five","Six","Seven","Eight","Nine",
+"Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen",
+"Seventeen","Eighteen","Nineteen"];
+
+let tens = ["","","Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety"];
+
+function convertBelowThousand(n){
+let str = "";
+
+if(n >= 100){
+str += ones[Math.floor(n/100)] + " Hundred ";
+n = n % 100;
+}
+
+if(n >= 20){
+str += tens[Math.floor(n/10)] + " ";
+n = n % 10;
+}
+
+if(n > 0){
+str += ones[n] + " ";
+}
+
+return str.trim();
+}
+
+let result = "";
+
+if(num >= 10000000){
+result += convertBelowThousand(Math.floor(num/10000000)) + " Crore ";
+num %= 10000000;
+}
+
+if(num >= 100000){
+result += convertBelowThousand(Math.floor(num/100000)) + " Lakh ";
+num %= 100000;
+}
+
+if(num >= 1000){
+result += convertBelowThousand(Math.floor(num/1000)) + " Thousand ";
+num %= 1000;
+}
+
+if(num > 0){
+result += convertBelowThousand(num);
+}
+
+return result.trim();
 }
 
 </script>
