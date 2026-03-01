@@ -139,19 +139,16 @@ th, td{
     justify-content:space-between;
 }
 
-/* FORCE COLOR PRINT */
 @media print{
     body{
         background:white;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
     }
-
     *{
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
     }
-
     .form-section{
         display:none;
     }
@@ -182,7 +179,7 @@ th, td{
 <input type="text" id="desc" placeholder="Description">
 <input type="number" id="qty" placeholder="Qty">
 <input type="number" id="price" placeholder="Price">
-<input type="number" id="discount" placeholder="Discount (₹)">
+<input type="number" id="discount" placeholder="Discount (%)">
 
 <button onclick="addItem()">Add Item</button>
 <button onclick="window.print()">Print</button>
@@ -191,20 +188,20 @@ th, td{
 <!-- INVOICE -->
 <div class="invoice">
 
-<!-- HEADER -->
 <div class="invoice-header">
 <div class="header-left">
 <img src="./WhatsApp Image 2026-03-01 at 11.10.04 AM.jpeg" class="logo">
 <div class="left-details">
-<p><b>ISO: </b>9001:2015</p>
-<p><b>MSME: </b>UDYAM-UP-43-0162513</p>
-<p><b>Phone: </b>9260929367,9198638082</p>
-<p><b>Email: </b> abhisheknenterprises.books@gmail.com</p>
+<p><b>ISO:</b> 9001:2015</p>
+<p><b>MSME:</b> UDYAM-UP-43-0162513</p>
+<p><b>Phone:</b> 9260929367,9198638082</p>
+<p><b>Email:</b> abhisheknenterprises.books@gmail.com</p>
 <p><b>GST IN:</b> 09BWQPR0128H2Z6</p>
 </div>
 </div>
 
 <div class="header-right">
+    <br>
 <p><b>Regd. Office:</b></p>
 <hr>
 <p>3/74 D, MIG SWARN JAYANTI VIHAR</p>
@@ -212,8 +209,9 @@ th, td{
 <p>KANPUR 208011</p>
 </div>
 </div>
+
 <hr>
-<!-- BILL & SHIP -->
+
 <div class="party-section">
 <div class="party-box">
 <b>Bill To:</b><br>
@@ -229,10 +227,12 @@ Phone: <span id="billPhoneDisplay"></span>
 Phone: <span id="shipPhoneDisplay"></span>
 </div>
 </div>
+
 <div class="bill-title">BILL OF SUPPLY</div>
 
-<p style="margin:3px 0;"><b>Invoice No:</b> <span id="invoiceNo"></span></p>
-<p style="margin:3px 0;"><b>Date:</b> <span id="date"></span></p>
+<p><b>Invoice No:</b> <span id="invoiceNo"></span></p>
+<p><b>Date:</b> <span id="date"></span></p>
+
 <div class="table-container">
 <table>
 <thead>
@@ -243,7 +243,7 @@ Phone: <span id="shipPhoneDisplay"></span>
 <th>Qty</th>
 <th>Price</th>
 <th>Gross</th>
-<th>Discount (₹)</th>
+<th>Discount %</th>
 <th>Amount</th>
 </tr>
 </thead>
@@ -251,7 +251,6 @@ Phone: <span id="shipPhoneDisplay"></span>
 </table>
 </div>
 
-<!-- FOOTER -->
 <div class="footer">
 
 <div class="summary">
@@ -262,7 +261,7 @@ Phone: <span id="shipPhoneDisplay"></span>
 </tr>
 <tr>
 <td>Postage/Freight(+)</td>
-<td id="freight">-2055</td>
+<td>-2055</td>
 </tr>
 <tr>
 <td><b>Net Amount</b></td>
@@ -272,12 +271,6 @@ Phone: <span id="shipPhoneDisplay"></span>
 </div>
 
 <div>
-<b>E. & O.E.</b><br>
-<b>Terms & Conditions</b><br>
-1. All disputes will be settled in Delhi Courts only.<br>
-2. Interest @ 12% p.a. will be charged, if bill is not paid in 30 days.<br>
-3. Exempted goods in GST Law under HSN code 49011010 (Printed Books).<br><br>
-
 <b>Amount In Words:</b> <span id="amountWords"></span>
 </div>
 
@@ -300,57 +293,61 @@ lastInvoice = parseInt(lastInvoice) + 1;
 localStorage.setItem("invoiceNumber", lastInvoice);
 document.getElementById("invoiceNo").innerText = lastInvoice;
 
-/* DATE */
 document.getElementById("date").innerText = new Date().toLocaleDateString();
 
-/* VARIABLES */
 let count = 0;
 let totalAmountValue = 0;
 let freightCharge = -2055;
 
-/* ADD ITEM */
 function addItem(){
 
-billToDisplay.innerText = billName.value;
-billAddressDisplay.innerText = billAddress.value;
-billPhoneDisplay.innerText = billPhone.value;
+// Party Details
+document.getElementById("billToDisplay").innerText = billName.value;
+document.getElementById("billAddressDisplay").innerText = billAddress.value;
+document.getElementById("billPhoneDisplay").innerText = billPhone.value;
 
-shipToDisplay.innerText = shipName.value;
-shipAddressDisplay.innerText = shipAddress.value;
-shipPhoneDisplay.innerText = shipPhone.value;
+document.getElementById("shipToDisplay").innerText = shipName.value;
+document.getElementById("shipAddressDisplay").innerText = shipAddress.value;
+document.getElementById("shipPhoneDisplay").innerText = shipPhone.value;
 
-let qty = parseFloat(qty.value) || 0;
-let price = parseFloat(price.value) || 0;
-let discount = parseFloat(document.getElementById("discount").value) || 0;
+// Item
+let isbnVal = document.getElementById("isbn").value;
+let descVal = document.getElementById("desc").value;
+let qtyVal = parseFloat(document.getElementById("qty").value) || 0;
+let priceVal = parseFloat(document.getElementById("price").value) || 0;
+let discountPercent = parseFloat(document.getElementById("discount").value) || 0;
 
-let gross = qty * price;
-let amount = gross - discount;
+let gross = qtyVal * priceVal;
+let discountAmount = gross * (discountPercent / 100);
+let finalAmount = gross - discountAmount;
 
 count++;
-totalAmountValue += amount;
+totalAmountValue += finalAmount;
 
 let row = `
 <tr>
 <td>${count}</td>
-<td>${isbn.value}</td>
-<td>${desc.value}</td>
-<td>${qty}</td>
-<td>${price}</td>
-<td>${gross}</td>
-<td>${discount}</td>
-<td>${amount}</td>
+<td>${isbnVal}</td>
+<td>${descVal}</td>
+<td>${qtyVal}</td>
+<td>${priceVal}</td>
+<td>${gross.toFixed(2)}</td>
+<td>${discountPercent}%</td>
+<td>${finalAmount.toFixed(2)}</td>
 </tr>
 `;
 
 document.getElementById("invoice-body").innerHTML += row;
-document.getElementById("totalAmount").innerText = totalAmountValue;
+
+document.getElementById("totalAmount").innerText = totalAmountValue.toFixed(2);
 
 let net = totalAmountValue + freightCharge;
-document.getElementById("netAmount").innerText = net;
-document.getElementById("amountWords").innerText = numberToWords(net) + " Only";
+document.getElementById("netAmount").innerText = net.toFixed(2);
+
+document.getElementById("amountWords").innerText = numberToWords(Math.floor(net)) + " Only";
+
 }
 
-/* NUMBER TO WORDS */
 function numberToWords(num){
 let a=["","One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten",
 "Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen",
