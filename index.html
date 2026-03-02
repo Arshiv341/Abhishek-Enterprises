@@ -49,12 +49,15 @@ button:hover{
     padding:15mm;
     box-sizing:border-box;
     position:relative;
+    
 }
 
 /* HEADER */
 .invoice-header{
     display:flex;
     justify-content:space-between;
+    border-style: solid;
+    border-width: 0.8px;
 }
 
 .header-left{ width:45%; }
@@ -73,8 +76,9 @@ button:hover{
 
 .header-right{
     width:45%;
-    text-align:right;
+    text-align: left;
     font-size:12px;
+    margin-top: 20px;
 }
 
 /* BILL SHIP FLEX */
@@ -171,7 +175,6 @@ th, td{
 <input type="text" id="billName" placeholder="Bill To Name">
 <input type="text" id="billAddress" placeholder="Bill To Address">
 <input type="text" id="billPhone" placeholder="Bill To Phone">
-
 <h4>Ship To Details</h4>
 <input type="text" id="shipName" placeholder="Ship To Name">
 <input type="text" id="shipAddress" placeholder="Ship To Address">
@@ -200,26 +203,21 @@ th, td{
 <p><b>ISO : </b>   9001:2015</p>
 <p><b>GST IN:</b> 09BWQPR0128H2Z6</p>
 <p><b>MSME:</b> UDYAM-UP-43-0162513</p>
-<p><b>Phone:</b> 9260929367,9198638082</p>
-<p><b>Email:</b> abhisheknenterprises.books@gmail.com</p>
 </div>
 </div>
 
 <div class="header-right">
 <p><b>Regd. Office:</b></p>
-<hr>
-<p>3/74 D,</p>
-<p>MIG SWARN JAYANTI VIHAR</p>
-<p>KOYLA NAGAR</p>
-<p>KANPUR 208011</p>
-<hr>
+<p>3/74 D,MIG SWARN JAYANTI VIHAR</p>
+<p>KOYLA NAGAR KANPUR 208011</p>
+<p><b>Phone:</b> 9260929367,9198638082</p>
+<p><b>Email:</b> abhisheknenterprises.books@gmail.com</p>
+<br><hr>
 <p><b>Invoice No:</b> <span id="invoiceNo"></span></p>
 <p><b>G.R / R.R No:</b> <span id="grnoDisplay"></span></p>
 <p><b>Date:</b> <span id="date"></span></p>
 </div>
 </div>
-
-<hr>
 
 <div class="party-section">
 <div class="party-box">
