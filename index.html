@@ -301,7 +301,7 @@ Phone: <span id="shipPhoneDisplay"></span>
 <script>
 
 let lastInvoice = localStorage.getItem("invoiceNumber");
-if(!lastInvoice){ lastInvoice = 970; }
+if(!lastInvoice){ lastInvoice = 501; }
 lastInvoice = parseInt(lastInvoice) + 1;
 localStorage.setItem("invoiceNumber", lastInvoice);
 document.getElementById("invoiceNo").innerText = lastInvoice;
