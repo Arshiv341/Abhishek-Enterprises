@@ -172,7 +172,8 @@ th, td{
 <!-- NEW GR INPUT -->
 <h4>Transport Details</h4>
 <input type="text" id="grno" placeholder="Enter G.R / R.R No">
-
+<h4>Invoice Details</h4>
+<input type="text" id="manualInvoiceNo" placeholder="Enter Invoice Number">
 <h4>Bill To Details</h4>
 <input type="text" id="billName" placeholder="Bill To Name">
 <input type="text" id="billAddress" placeholder="Bill To Address">
@@ -300,19 +301,23 @@ Phone: <span id="shipPhoneDisplay"></span>
 
 <script>
 
-let lastInvoice = localStorage.getItem("invoiceNumber");
-if(!lastInvoice){ lastInvoice = 501; }
-lastInvoice = parseInt(lastInvoice) + 1;
-localStorage.setItem("invoiceNumber", lastInvoice);
-document.getElementById("invoiceNo").innerText = lastInvoice;
-
 document.getElementById("date").innerText = new Date().toLocaleDateString();
+
+/* 👇 Invoice number live show hoga */
+document.getElementById("manualInvoiceNo")
+.addEventListener("input", function(){
+    document.getElementById("invoiceNo").innerText = this.value;
+});
 
 let count = 0;
 let totalAmountValue = 0;
 let freightCharge = -2055;
 
 function addItem(){
+
+/* 👇 Safety: agar user ne pehle type nahi kiya */
+document.getElementById("invoiceNo").innerText =
+document.getElementById("manualInvoiceNo").value;
 
 document.getElementById("billToDisplay").innerText = billName.value;
 document.getElementById("billAddressDisplay").innerText = billAddress.value;
@@ -322,7 +327,8 @@ document.getElementById("shipToDisplay").innerText = shipName.value;
 document.getElementById("shipAddressDisplay").innerText = shipAddress.value;
 document.getElementById("shipPhoneDisplay").innerText = shipPhone.value;
 
-document.getElementById("grnoDisplay").innerText = document.getElementById("grno").value;
+document.getElementById("grnoDisplay").innerText = 
+document.getElementById("grno").value;
 
 let isbnVal = document.getElementById("isbn").value;
 let descVal = document.getElementById("desc").value;
@@ -357,7 +363,8 @@ document.getElementById("totalAmount").innerText = totalAmountValue.toFixed(2);
 let net = totalAmountValue;
 document.getElementById("netAmount").innerText = net.toFixed(2);
 
-document.getElementById("amountWords").innerText = numberToWords(Math.floor(net)) + " Only";
+document.getElementById("amountWords").innerText =
+numberToWords(Math.floor(net)) + " Only";
 }
 
 function numberToWords(num){
